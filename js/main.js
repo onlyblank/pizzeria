@@ -22,8 +22,6 @@ class Pizzeria extends Ingredientes {
       backgroundImage: `url(image/base.png)`
     });
 
-    // const pizzaIngredients = new Ingredientes(this.ingredientes);
-    // pizzaIngredients.selected = new Proxy(pizzaIngredients.selected, {
     this.selected = new Proxy(this.selected, {
       set: (target, property, value, receiver) => {
         target[property] = value;
@@ -45,16 +43,14 @@ class Pizzeria extends Ingredientes {
     });
 
 
-    this.template =
-      `<div class="pizzeria">
-      </div>`;
+    this.template = `<div class="pizzeria"></div>`;
     document.body.innerHTML = this.template;
     const pizzeria = document.getElementsByClassName('pizzeria')[0];
     pizzeria.appendChild(pizza);
+
     priceElement.innerText = pizzaPrice;
     priceElement.className = 'pizza-price';
     pizzeria.appendChild(priceElement);
-    // pizzeria.appendChild(pizzaIngredients.element);
     pizzeria.appendChild(this.ingredientesElement);
   }
 }
