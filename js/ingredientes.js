@@ -10,6 +10,10 @@ export class Ingredientes {
 
   initIngredientes() {
     let element = this.element;
+    const title = document.createElement('h1');
+    title.innerText = 'Ingredientes';
+    element.appendChild(title);
+    
     this.ingredientes.map(ingrediente => {
       const newIngrediente = new Ingrediente(ingrediente);
       newIngrediente.element.addEventListener('click', () => {

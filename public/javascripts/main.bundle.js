@@ -72,7 +72,7 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ingredientes = __webpack_require__(2);
+var _ingredientes = __webpack_require__(1);
 
 var _ingredientes2 = __webpack_require__(3);
 
@@ -194,6 +194,65 @@ new Pizzeria();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Ingredientes = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ingrediente = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ingredientes = exports.Ingredientes = function () {
+  function Ingredientes(ingredientes) {
+    _classCallCheck(this, Ingredientes);
+
+    this.ingredientes = ingredientes;
+    this.selected = [];
+    this.element = document.createElement('div');
+    this.element.className = 'ingredientes';
+    this.initIngredientes();
+  }
+
+  _createClass(Ingredientes, [{
+    key: 'initIngredientes',
+    value: function initIngredientes() {
+      var _this = this;
+
+      var element = this.element;
+      var title = document.createElement('h1');
+      title.innerText = 'Ingredientes';
+      element.appendChild(title);
+
+      this.ingredientes.map(function (ingrediente) {
+        var newIngrediente = new _ingrediente.Ingrediente(ingrediente);
+        newIngrediente.element.addEventListener('click', function () {
+          var index = _this.selected.indexOf(newIngrediente);
+          if (index < 0) {
+            _this.selected.push(newIngrediente);
+          } else {
+            _this.selected.splice(index, 1);
+          }
+        });
+        element.appendChild(newIngrediente.element);
+      });
+
+      return element;
+    }
+  }]);
+
+  return Ingredientes;
+}();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -237,61 +296,6 @@ var Ingrediente = exports.Ingrediente = function () {
   }]);
 
   return Ingrediente;
-}();
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Ingredientes = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _ingrediente = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Ingredientes = exports.Ingredientes = function () {
-  function Ingredientes(ingredientes) {
-    _classCallCheck(this, Ingredientes);
-
-    this.ingredientes = ingredientes;
-    this.selected = [];
-    this.element = document.createElement('div');
-    this.element.className = 'ingredientes';
-    this.initIngredientes();
-  }
-
-  _createClass(Ingredientes, [{
-    key: 'initIngredientes',
-    value: function initIngredientes() {
-      var _this = this;
-
-      var element = this.element;
-      this.ingredientes.map(function (ingrediente) {
-        var newIngrediente = new _ingrediente.Ingrediente(ingrediente);
-        newIngrediente.element.addEventListener('click', function () {
-          var index = _this.selected.indexOf(newIngrediente);
-          if (index < 0) {
-            _this.selected.push(newIngrediente);
-          } else {
-            _this.selected.splice(index, 1);
-          }
-        });
-        element.appendChild(newIngrediente.element);
-      });
-
-      return element;
-    }
-  }]);
-
-  return Ingredientes;
 }();
 
 /***/ }),
