@@ -3,24 +3,28 @@ export class Ingredientes {
   constructor(ingredientes) {
     this.ingredientes = ingredientes;
     this.selected = [];
-    this.ingredientesElement = document.createElement('div');
-    this.ingredientesElement.className = 'ingredientes';
-    this.ingredientesElement = this.init();
+    this.element = document.createElement('div');
+    this.element.className = 'ingredientes';
+    this.initIngredientes();
   }
 
-  init() {
-    let element = this.ingredientesElement;
+  initIngredientes() {
+    let element = this.element;
+    const title = document.createElement('h1');
+    title.innerText = 'Ingredientes';
+    element.appendChild(title);
+    
     this.ingredientes.map(ingrediente => {
       const newIngrediente = new Ingrediente(ingrediente);
-      newIngrediente.ingredienteElement.addEventListener('click', () => {
+      newIngrediente.element.addEventListener('click', () => {
         const index = this.selected.indexOf(newIngrediente);
         if (index < 0) {
           this.selected.push(newIngrediente);
         } else {
           this.selected.splice(index, 1);
         }
-      });
-      element.appendChild(newIngrediente.ingredienteElement);
+      }); 
+      element.appendChild(newIngrediente.element);
     });
 
     return element;

@@ -94,19 +94,45 @@ var Pizzeria = function (_Ingredientes) {
     return _this;
   }
 
+  /**
+   * inicializador de pizzeria
+   * 
+   * Este metodo:
+   *    crea un elemento del tipo div para "pizza".
+   *    crea un elemento del tipo div para mostrar el precio "priceElement"
+   *    toma la propiedad selected y la transforma en un proxy de si mismo
+   *      haciendo que recorra los elementos de selected cambiando sus propiedades 
+   *      y clonando su elemento html para agregarlo al elemento "pizza"
+   *    crea el template de "pizzeria" y se lo agrega al body, luego busca
+   */
+
+
   _createClass(Pizzeria, [{
     key: 'initPizzeria',
     value: function initPizzeria() {
       var _this2 = this;
 
-      var defaulPrice = 3000;
-      var pizzaPrice = defaulPrice;
       var pizza = document.createElement('div');
       var priceElement = document.createElement('div');
+      var pizzeria = document.createElement('div');
+
+      var defaulPrice = 3000; // asigna valor por defecto
+      var pizzaPrice = defaulPrice;
+
       pizza.className = 'pizza';
+      pizzeria.className = 'pizzeria';
+      priceElement.className = 'pizza-price';
+      priceElement.innerText = pizzaPrice;
+
       Object.assign(pizza.style, {
         backgroundImage: 'url(image/base.png)'
       });
+
+      // unimos elementos
+      pizzeria.appendChild(pizza);
+      pizzeria.appendChild(priceElement);
+      pizzeria.appendChild(this.element);
+      document.body.appendChild(pizzeria);
 
       this.selected = new Proxy(this.selected, {
         set: function set(target, property, value, receiver) {
@@ -114,29 +140,42 @@ var Pizzeria = function (_Ingredientes) {
           pizza.innerHTML = '';
           pizzaPrice = defaulPrice;
           _this2.selected.forEach(function (ingrediente) {
-            var clone = ingrediente.ingredienteElement.cloneNode(true);
-            Object.assign(clone.style, {
-              backgroundColor: 'transparent',
-              zIndex: clone.getAttribute('priority')
-            });
-            clone.innerText = '';
-            pizzaPrice += +clone.getAttribute('price');
+            var clone = _this2.getTransparentClone(ingrediente);
+            pizzaPrice += +ingrediente.ingrediente.price;
             pizza.appendChild(clone);
           });
           priceElement.innerText = pizzaPrice;
           return true;
         }
       });
+    }
 
-      this.template = '<div class="pizzeria"></div>';
-      document.body.innerHTML = this.template;
-      var pizzeria = document.getElementsByClassName('pizzeria')[0];
-      pizzeria.appendChild(pizza);
+    /**
+     * @param {item} element
+     * item contiene:
+     * 
+     * ingrediente = {
+     *    name: nombre del ingrediente
+     *    image: path de la imagen del ingrediente,
+     *    priority: z-index utilizado por el template
+     *    price: precio
+     * }
+     * element = {
+     *    ingrediente html element (div.nombreDelIngrediente)
+     * }
+     */
 
-      priceElement.innerText = pizzaPrice;
-      priceElement.className = 'pizza-price';
-      pizzeria.appendChild(priceElement);
-      pizzeria.appendChild(this.ingredientesElement);
+  }, {
+    key: 'getTransparentClone',
+    value: function getTransparentClone(item) {
+      var clone = item.element.cloneNode(true);
+      clone.innerText = '';
+      Object.assign(clone.style, {
+        backgroundColor: 'transparent',
+        backgroundImage: 'url(' + item.ingrediente.image + ')',
+        zIndex: item.ingrediente.priority
+      });
+      return clone;
     }
   }]);
 
@@ -169,20 +208,24 @@ var Ingredientes = exports.Ingredientes = function () {
 
     this.ingredientes = ingredientes;
     this.selected = [];
-    this.ingredientesElement = document.createElement('div');
-    this.ingredientesElement.className = 'ingredientes';
-    this.ingredientesElement = this.init();
+    this.element = document.createElement('div');
+    this.element.className = 'ingredientes';
+    this.initIngredientes();
   }
 
   _createClass(Ingredientes, [{
-    key: 'init',
-    value: function init() {
+    key: 'initIngredientes',
+    value: function initIngredientes() {
       var _this = this;
 
-      var element = this.ingredientesElement;
+      var element = this.element;
+      var title = document.createElement('h1');
+      title.innerText = 'Ingredientes';
+      element.appendChild(title);
+
       this.ingredientes.map(function (ingrediente) {
         var newIngrediente = new _ingrediente.Ingrediente(ingrediente);
-        newIngrediente.ingredienteElement.addEventListener('click', function () {
+        newIngrediente.element.addEventListener('click', function () {
           var index = _this.selected.indexOf(newIngrediente);
           if (index < 0) {
             _this.selected.push(newIngrediente);
@@ -190,7 +233,7 @@ var Ingredientes = exports.Ingredientes = function () {
             _this.selected.splice(index, 1);
           }
         });
-        element.appendChild(newIngrediente.ingredienteElement);
+        element.appendChild(newIngrediente.element);
       });
 
       return element;
@@ -220,39 +263,34 @@ var Ingrediente = exports.Ingrediente = function () {
     _classCallCheck(this, Ingrediente);
 
     this.ingrediente = ingrediente;
-    this.ingredienteElement = document.createElement('div');
-    this.ingredienteElement = this.init();
+    this.element = document.createElement('div');
+    this.initIngrediente();
   }
 
   _createClass(Ingrediente, [{
-    key: 'init',
-    value: function init() {
+    key: 'initIngrediente',
+    value: function initIngrediente() {
       var _this = this;
 
-      var element = this.ingredienteElement;
+      var element = this.element;
       var checked = document.createElement('span');
       checked.className = 'checked';
+      Object.assign(element.style, {
+        backgroundColor: 'white'
+      });
+      element.innerText = this.ingrediente.name;
+      element.className = 'ingredientes__item ' + this.ingrediente.name;
+
       element.addEventListener('click', function (event) {
-        if (element.getAttribute('selected') === 'true') {
-          element.innerText = _this.ingrediente.name;
-          element.setAttribute('selected', false);
-          Object.assign(element.style, {
-            backgroundColor: 'white',
-            backgroundImage: 'url(' + _this.ingrediente.image + ')'
-          });
+        if (element.classList.contains('selected')) {
+          element.classList.remove('selected');
+          element.innerHTML = _this.ingrediente.name;
         } else {
+          element.classList.add('selected');
           element.appendChild(checked);
-          element.setAttribute('selected', true);
-          Object.assign(element.style, {
-            backgroundImage: 'url(' + _this.ingrediente.image + ')'
-          });
         }
       });
 
-      element.innerText = this.ingrediente.name;
-      element.setAttribute('price', this.ingrediente.price);
-      element.setAttribute('priority', this.ingrediente.priority);
-      element.className = 'ingredientes__item ' + this.ingrediente.name;
       return element;
     }
   }]);
