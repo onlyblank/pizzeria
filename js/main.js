@@ -26,10 +26,10 @@ class Pizzeria extends Ingredientes {
     const pizza = document.createElement('div');
     const priceElement = document.createElement('div');
     const pizzeria = document.createElement('div');
-    
+
     const defaulPrice = 3000; // asigna valor por defecto
     let pizzaPrice = defaulPrice;
-    
+
     pizza.className = 'pizza';
     pizzeria.className = 'pizzeria';
     priceElement.className = 'pizza-price';
@@ -62,7 +62,9 @@ class Pizzeria extends Ingredientes {
   }
 
   /**
-   * @param {ingrediente, element} element
+   * @param {item} element
+   * item contiene:
+   * 
    * ingrediente = {
    *    name: nombre del ingrediente
    *    image: path de la imagen del ingrediente,
