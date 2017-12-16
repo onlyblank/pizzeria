@@ -1,19 +1,18 @@
 export function htmlCreator() {
-
   return {
-    element: document.createElement('div'),
-    create(type, event,toggleClass){
-      this.element = document.createElement('div');
-      this.element.addEventListener(event, ()=>{
-        this.toggleClass(toggleClass);
-      });
-    },
-    toggleClass(className) {
-      if (this.element.classList.contains(className)) {
-        element.classList.remove(className);
-      } else {
-        element.classList.add(className);
-      }
+    create({
+      type = 'div',
+      className = '',
+      innerText = '',
+      name = '',
+      value = null
+    }) {
+      const element = document.createElement(type);
+      element.innerText = innerText;
+      element.className = className;
+      element.name = name;
+      element.value = value;
+      return element;
     }
   }
 }

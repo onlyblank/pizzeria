@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,11 +70,143 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.htmlCreator = htmlCreator;
+function htmlCreator() {
+  return {
+    create: function create(_ref) {
+      var _ref$type = _ref.type,
+          type = _ref$type === undefined ? 'div' : _ref$type,
+          _ref$className = _ref.className,
+          className = _ref$className === undefined ? '' : _ref$className,
+          _ref$innerText = _ref.innerText,
+          innerText = _ref$innerText === undefined ? '' : _ref$innerText,
+          _ref$name = _ref.name,
+          name = _ref$name === undefined ? '' : _ref$name,
+          _ref$value = _ref.value,
+          value = _ref$value === undefined ? null : _ref$value;
+
+      var element = document.createElement(type);
+      element.innerText = innerText;
+      element.className = className;
+      element.name = name;
+      element.value = value;
+      return element;
+    }
+  };
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pizzeria = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Main = function Main() {
+  _classCallCheck(this, Main);
+
+  document.body.appendChild(new _pizzeria.Pizzeria().pizzeriaElement);
+};
+
+new Main();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Pizzeria = undefined;
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ingredientes = __webpack_require__(1);
+var _pizza = __webpack_require__(3);
 
-var _ingredientes2 = __webpack_require__(3);
+var _htmlCreator = __webpack_require__(0);
+
+var _masas = __webpack_require__(7);
+
+var _masaTypes = __webpack_require__(8);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Pizzeria = exports.Pizzeria = function () {
+  function Pizzeria() {
+    _classCallCheck(this, Pizzeria);
+
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.pizza = new _pizza.Pizza();
+    this.masas = new _masas.Masas(_masaTypes.dataMasas);
+    this.pizzeriaElement = this.initPizzeria();
+  }
+
+  _createClass(Pizzeria, [{
+    key: 'initPizzeria',
+    value: function initPizzeria() {
+      var pizzeria = this.html.create({ // contienen a todos los demas elementos
+        type: 'div',
+        className: 'pizzeria'
+      });
+      var masas = this.masas.masasElement.childNodes;
+
+      masas.forEach(this.setMasaPizza.bind(this));
+      Object.assign(this.pizza.pizzaElement.style, {
+        backgroundImage: 'url(' + this.masas.masas[0].image + ')'
+      });
+      this.pizza.setMassPrice(this.masas.masas[0].price);
+      // unimos elementos dentro de pizzeria
+      pizzeria.appendChild(this.pizza.pizzaElement);
+      pizzeria.appendChild(this.pizza.priceElement);
+      pizzeria.appendChild(this.pizza.ingredientsElement);
+      pizzeria.appendChild(this.masas.masasElement);
+      return pizzeria;
+    }
+  }, {
+    key: 'setMasaPizza',
+    value: function setMasaPizza(masa) {
+      var _self = this;
+      masa.addEventListener('click', function (event, newww) {
+        console.log(newww);
+        var target = event.target;
+        _self.pizza.pizzaElement.style.backgroundImage = target.style.backgroundImage;
+        _self.pizza.setMassPrice(target.value);
+      });
+    }
+  }]);
+
+  return Pizzeria;
+}();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Pizza = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ingredients = __webpack_require__(4);
+
+var _ingredients2 = __webpack_require__(6);
+
+var _htmlCreator = __webpack_require__(0);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -82,72 +214,78 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Pizzeria = function (_Ingredientes) {
-  _inherits(Pizzeria, _Ingredientes);
+var Pizza = exports.Pizza = function (_Ingredients) {
+  _inherits(Pizza, _Ingredients);
 
-  function Pizzeria() {
-    _classCallCheck(this, Pizzeria);
+  function Pizza() {
+    _classCallCheck(this, Pizza);
 
-    var _this = _possibleConstructorReturn(this, (Pizzeria.__proto__ || Object.getPrototypeOf(Pizzeria)).call(this, _ingredientes2.data));
+    var _this = _possibleConstructorReturn(this, (Pizza.__proto__ || Object.getPrototypeOf(Pizza)).call(this, _ingredients2.data));
 
-    _this.initPizzeria();
+    _this.html = (0, _htmlCreator.htmlCreator)();
+    _this.massPrice = 0;
+    _this.pizzaElement = _this.html.create({ // elemento pizza que contiene la maza
+      type: 'div',
+      className: 'pizzeria__pizza'
+    });
+    _this.priceElement = _this.html.create({ // solo muestra el precio
+      type: 'div',
+      className: 'pizzeria__pizza-price',
+      innerText: _this.massPrice
+    });
+    _this.pizzaElement = _this.initPizza();
     return _this;
   }
 
-  /**
-   * inicializador de pizzeria
-   * 
-   * Este metodo:
-   *    crea un elemento del tipo div para "pizza".
-   *    crea un elemento del tipo div para mostrar el precio "priceElement"
-   *    toma la propiedad selected y la transforma en un proxy de si mismo
-   *      haciendo que recorra los elementos de selected cambiando sus propiedades 
-   *      y clonando su elemento html para agregarlo al elemento "pizza"
-   *    crea el template de "pizzeria" y se lo agrega al body, luego busca
-   */
+  _createClass(Pizza, [{
+    key: 'setMassPrice',
+    value: function setMassPrice(newMassPrice) {
+      this.massPrice = newMassPrice;
+      this.pizzaElement = this.initPizza();
+    }
 
+    /**
+     * inicializador de pizzeria
+     * 
+     * Este metodo:
+     *    crea un elemento del tipo div para "pizza".
+     *    crea un elemento del tipo div para mostrar el precio "priceElement"
+     *    toma la propiedad selected y la transforma en un proxy de si mismo
+     *      haciendo que recorra los elementos de selected cambiando sus propiedades 
+     *      y clonando su elemento html para agregarlo al elemento "pizza"
+     */
 
-  _createClass(Pizzeria, [{
-    key: 'initPizzeria',
-    value: function initPizzeria() {
+  }, {
+    key: 'initPizza',
+    value: function initPizza() {
       var _this2 = this;
 
-      var pizza = document.createElement('div');
-      var priceElement = document.createElement('div');
-      var pizzeria = document.createElement('div');
-
-      var defaulPrice = 3000; // asigna valor por defecto
+      var defaulPrice = this.massPrice; // asigna valor por defecto
       var pizzaPrice = defaulPrice;
-
-      pizza.className = 'pizza';
-      pizzeria.className = 'pizzeria';
-      priceElement.className = 'pizza-price';
-      priceElement.innerText = pizzaPrice;
-
-      Object.assign(pizza.style, {
-        backgroundImage: 'url(image/base.png)'
-      });
-
-      // unimos elementos
-      pizzeria.appendChild(pizza);
-      pizzeria.appendChild(priceElement);
-      pizzeria.appendChild(this.element);
-      document.body.appendChild(pizzeria);
 
       this.selected = new Proxy(this.selected, {
         set: function set(target, property, value, receiver) {
           target[property] = value;
-          pizza.innerHTML = '';
+          _this2.pizzaElement.innerHTML = '';
           pizzaPrice = defaulPrice;
-          _this2.selected.forEach(function (ingrediente) {
-            var clone = _this2.getTransparentClone(ingrediente);
-            pizzaPrice += +ingrediente.ingrediente.price;
-            pizza.appendChild(clone);
-          });
-          priceElement.innerText = pizzaPrice;
+          if (property === 'length') {
+            _this2.selected.forEach(function (selected) {
+              var clone = _this2.getTransparentClone(selected);
+              _this2.pizzaElement.appendChild(clone);
+
+              pizzaPrice += selected.ingredient.price;
+            });
+          }
+          _this2.priceElement.innerText = pizzaPrice;
           return true;
         }
       });
+
+      // esto reinicia el precio y el contenido de la pizza
+      this.selected['length'] = this.selected.length;
+
+      this.priceElement.innerText = pizzaPrice;
+      return this.pizzaElement;
     }
 
     /**
@@ -167,25 +305,23 @@ var Pizzeria = function (_Ingredientes) {
 
   }, {
     key: 'getTransparentClone',
-    value: function getTransparentClone(item) {
-      var clone = item.element.cloneNode(true);
+    value: function getTransparentClone(selected) {
+      var clone = selected.element.cloneNode(true);
       clone.innerText = '';
       Object.assign(clone.style, {
         backgroundColor: 'transparent',
-        backgroundImage: 'url(' + item.ingrediente.image + ')',
-        zIndex: item.ingrediente.priority
+        backgroundImage: 'url(' + selected.ingredient.image + ')',
+        zIndex: selected.ingredient.priority
       });
       return clone;
     }
   }]);
 
-  return Pizzeria;
-}(_ingredientes.Ingredientes);
-
-new Pizzeria();
+  return Pizza;
+}(_ingredients.Ingredients);
 
 /***/ }),
-/* 1 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -194,57 +330,64 @@ new Pizzeria();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Ingredientes = undefined;
+exports.Ingredients = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ingrediente = __webpack_require__(2);
+var _htmlCreator = __webpack_require__(0);
+
+var _ingredient = __webpack_require__(5);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Ingredientes = exports.Ingredientes = function () {
-  function Ingredientes(ingredientes) {
-    _classCallCheck(this, Ingredientes);
+var Ingredients = exports.Ingredients = function () {
+  function Ingredients(ingredients) {
+    _classCallCheck(this, Ingredients);
 
-    this.ingredientes = ingredientes;
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.ingredients = ingredients;
     this.selected = [];
-    this.element = document.createElement('div');
-    this.element.className = 'ingredientes';
-    this.initIngredientes();
+    this.ingredientsElement = this.html.create({
+      type: 'div',
+      className: 'ingredients'
+    });
+    this.initIngredients();
   }
 
-  _createClass(Ingredientes, [{
-    key: 'initIngredientes',
-    value: function initIngredientes() {
+  _createClass(Ingredients, [{
+    key: 'initIngredients',
+    value: function initIngredients() {
       var _this = this;
 
-      var element = this.element;
-      var title = document.createElement('h1');
-      title.innerText = 'Ingredientes';
-      element.appendChild(title);
+      var element = this.ingredientsElement;
+      element.appendChild(this.html.create({
+        type: 'h1',
+        className: 'pizzeria__ingredients-title',
+        innerText: 'Ingredients'
+      }));
 
-      this.ingredientes.map(function (ingrediente) {
-        var newIngrediente = new _ingrediente.Ingrediente(ingrediente);
-        newIngrediente.element.addEventListener('click', function () {
-          var index = _this.selected.indexOf(newIngrediente);
+      this.ingredients.map(function (ingredient) {
+        var newIngredient = new _ingredient.Ingredient(ingredient);
+        newIngredient.element.addEventListener('click', function () {
+          var index = _this.selected.indexOf(newIngredient);
           if (index < 0) {
-            _this.selected.push(newIngrediente);
+            _this.selected.push(newIngredient);
           } else {
             _this.selected.splice(index, 1);
           }
         });
-        element.appendChild(newIngrediente.element);
+        element.appendChild(newIngredient.element);
       });
 
       return element;
     }
   }]);
 
-  return Ingredientes;
+  return Ingredients;
 }();
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -253,41 +396,47 @@ var Ingredientes = exports.Ingredientes = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Ingredient = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _htmlCreator = __webpack_require__(0);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Ingrediente = exports.Ingrediente = function () {
-  function Ingrediente(ingrediente) {
-    _classCallCheck(this, Ingrediente);
+var Ingredient = exports.Ingredient = function () {
+  function Ingredient(ingredient) {
+    _classCallCheck(this, Ingredient);
 
-    this.ingrediente = ingrediente;
-    this.element = document.createElement('div');
-    this.initIngrediente();
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.ingredient = ingredient;
+    this.element = this.html.create({
+      type: 'div',
+      className: 'pizzeria__ingredients__item ' + this.ingredient.name,
+      innerText: this.ingredient.name
+    });
+    this.initIngredient();
   }
 
-  _createClass(Ingrediente, [{
-    key: 'initIngrediente',
-    value: function initIngrediente() {
-      var _this = this;
-
+  _createClass(Ingredient, [{
+    key: 'initIngredient',
+    value: function initIngredient() {
       var element = this.element;
-      var checked = document.createElement('span');
-      checked.className = 'checked';
+      element.innerHTML = this.ingredient.name;
+      element.appendChild(this.html.create({
+        type: 'span',
+        className: 'pizzeria__ingredients__item-checked'
+      }));
+
       Object.assign(element.style, {
         backgroundColor: 'white'
       });
-      element.innerText = this.ingrediente.name;
-      element.className = 'ingredientes__item ' + this.ingrediente.name;
 
       element.addEventListener('click', function (event) {
         if (element.classList.contains('selected')) {
           element.classList.remove('selected');
-          element.innerHTML = _this.ingrediente.name;
         } else {
           element.classList.add('selected');
-          element.appendChild(checked);
         }
       });
 
@@ -295,11 +444,11 @@ var Ingrediente = exports.Ingrediente = function () {
     }
   }]);
 
-  return Ingrediente;
+  return Ingredient;
 }();
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,6 +497,91 @@ var data = exports.data = [{
   "image": "./image/rucula.png",
   "price": 100,
   "priority": 7
+}];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Masas = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _htmlCreator = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Masas = exports.Masas = function () {
+  function Masas(masas) {
+    _classCallCheck(this, Masas);
+
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.masas = masas;
+    this.masasElement = this.html.create({
+      type: 'div',
+      className: 'pizzeria__masas'
+    });
+    this.masasElement = this.initMasas();
+  }
+
+  _createClass(Masas, [{
+    key: 'initMasas',
+    value: function initMasas() {
+      var _this = this;
+
+      this.masas.forEach(function (masa, i) {
+        var masaElement = _this.creteContainer(masa);
+        _this.masasElement.appendChild(masaElement);
+      });
+      return this.masasElement;
+    }
+  }, {
+    key: 'creteContainer',
+    value: function creteContainer(masa) {
+      var container = this.html.create({
+        type: 'div',
+        className: 'pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
+        innerText: masa.name,
+        value: masa.price
+      });
+      Object.assign(container.style, {
+        backgroundImage: 'url(' + masa.image + ')'
+      });
+      return container;
+    }
+  }]);
+
+  return Masas;
+}();
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var dataMasas = exports.dataMasas = [{
+  "name": "Normal",
+  "image": "./image/normal.png",
+  "price": 3500
+}, {
+  "name": "Borde Queso",
+  "image": "./image/border-queso.png",
+  "price": 4000
+}, {
+  "name": "Delgada",
+  "image": "./image/delgada.png",
+  "price": 3000
 }];
 
 /***/ })
