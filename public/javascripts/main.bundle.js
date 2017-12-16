@@ -106,8 +106,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Main = function Main() {
   _classCallCheck(this, Main);
 
-  this.Pizzeria = new _pizzeria.Pizzeria();
-  document.body.appendChild(this.Pizzeria.pizzeriaElement);
+  document.body.appendChild(new _pizzeria.Pizzeria().pizzeriaElement);
 };
 
 new Main();
