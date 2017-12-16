@@ -3,7 +3,7 @@ import {
 } from './pizzeria';
 
 class Main {
-  constructor(){
+  constructor() {
     document.body.appendChild(new Pizzeria().pizzeriaElement);
   }
 }
