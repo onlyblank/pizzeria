@@ -14,9 +14,9 @@
     padding: 20px;
     box-sizing: border-box;
   }
-  &>.ingredientes {
+  &>.ingredients {
     margin-top: 25px;
-    .ingredientes__item {
+    .ingredients__item {
       padding: 5px 0;
       border-bottom: 2px solid silver;
       min-height: 25px;
@@ -26,12 +26,13 @@
       display: flex;
       flex-direction: row-reverse;
       text-align: left;
-      align-items: baseline;
+      align-items: center;
       justify-content: flex-end;
+      text-transform: capitalize;
       .checked {
-        opacity: 1;
+        opacity: 0;
         transition: all 250ms;
-        margin: 0 10px;
+        width: 0;
         &::after {
           content: '';
           width: 9px;
@@ -47,6 +48,18 @@
           transform: rotate(-45deg);
           display: inline-block;
           opacity: 1;
+          transition: all 200ms;
+          border-bottom-color: transparent; 
+          border-left-color: transparent;
+        }
+      }
+      &.selected .checked {
+        opacity: 1;
+        margin: 0 10px;
+        width: auto;
+        &::after {
+          border-bottom-color: #1f201c; 
+          border-left-color: #1f201c;
         }
       }
     }
@@ -60,7 +73,7 @@
     overflow: hidden;
     background-position: center;
     background-size: cover;
-    .ingredientes__item {
+    .ingredients__item {
       position: absolute;
       height: 500px;
       width: 500px;
