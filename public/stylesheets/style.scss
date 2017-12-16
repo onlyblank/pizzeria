@@ -2,6 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   width: 650px;
+  margin: 0 auto;
+  position: relative;
   &__pizza-price {
     height: 500px;
     width: 500px;
@@ -19,7 +21,8 @@
   &__ingredients {
     display: inline-block;
     flex-grow: 1;
-    flex-basis: calc(100% / 3);
+    flex-basis: calc(100% / 90);
+    margin-left: 10px;
     &__item {
       padding: 5px 0;
       border-bottom: 2px solid silver;
@@ -106,6 +109,15 @@
       flex-grow: 1;
       flex-basis: calc(100% / 3);
       cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width:650px){
+  .pizzeria{
+    width: 500px;
+    &__pizza{
+      flex-basis: calc(100% / 1);
     }
   }
 }
