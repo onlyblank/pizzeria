@@ -82,11 +82,17 @@ function htmlCreator() {
           _ref$className = _ref.className,
           className = _ref$className === undefined ? '' : _ref$className,
           _ref$innerText = _ref.innerText,
-          innerText = _ref$innerText === undefined ? '' : _ref$innerText;
+          innerText = _ref$innerText === undefined ? '' : _ref$innerText,
+          _ref$name = _ref.name,
+          name = _ref$name === undefined ? '' : _ref$name,
+          _ref$value = _ref.value,
+          value = _ref$value === undefined ? null : _ref$value;
 
       var element = document.createElement(type);
       element.innerText = innerText;
       element.className = className;
+      element.name = name;
+      element.value = value;
       return element;
     }
   };
@@ -129,6 +135,10 @@ var _pizza = __webpack_require__(3);
 
 var _htmlCreator = __webpack_require__(0);
 
+var _masas = __webpack_require__(7);
+
+var _masaTypes = __webpack_require__(8);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Pizzeria = exports.Pizzeria = function () {
@@ -137,6 +147,7 @@ var Pizzeria = exports.Pizzeria = function () {
 
     this.html = (0, _htmlCreator.htmlCreator)();
     this.pizza = new _pizza.Pizza();
+    this.masas = new _masas.Masas(_masaTypes.dataMasas);
     this.pizzeriaElement = this.initPizzeria();
   }
 
@@ -147,12 +158,30 @@ var Pizzeria = exports.Pizzeria = function () {
         type: 'div',
         className: 'pizzeria'
       });
+      var masas = this.masas.masasElement.childNodes;
 
+      masas.forEach(this.setMasaPizza.bind(this));
+      Object.assign(this.pizza.pizzaElement.style, {
+        backgroundImage: 'url(' + this.masas.masas[0].image + ')'
+      });
+      this.pizza.setMassPrice(this.masas.masas[0].price);
       // unimos elementos dentro de pizzeria
       pizzeria.appendChild(this.pizza.pizzaElement);
       pizzeria.appendChild(this.pizza.priceElement);
       pizzeria.appendChild(this.pizza.ingredientsElement);
+      pizzeria.appendChild(this.masas.masasElement);
       return pizzeria;
+    }
+  }, {
+    key: 'setMasaPizza',
+    value: function setMasaPizza(masa) {
+      var _self = this;
+      masa.addEventListener('click', function (event, newww) {
+        console.log(newww);
+        var target = event.target;
+        _self.pizza.pizzaElement.style.backgroundImage = target.style.backgroundImage;
+        _self.pizza.setMassPrice(target.value);
+      });
     }
   }]);
 
@@ -194,55 +223,55 @@ var Pizza = exports.Pizza = function (_Ingredients) {
     var _this = _possibleConstructorReturn(this, (Pizza.__proto__ || Object.getPrototypeOf(Pizza)).call(this, _ingredients2.data));
 
     _this.html = (0, _htmlCreator.htmlCreator)();
-    _this.priceElement = null;
+    _this.massPrice = 0;
+    _this.pizzaElement = _this.html.create({ // elemento pizza que contiene la maza
+      type: 'div',
+      className: 'pizzeria__pizza'
+    });
+    _this.priceElement = _this.html.create({ // solo muestra el precio
+      type: 'div',
+      className: 'pizzeria__pizza-price',
+      innerText: _this.massPrice
+    });
     _this.pizzaElement = _this.initPizza();
     return _this;
   }
 
-  /**
-   * inicializador de pizzeria
-   * 
-   * Este metodo:
-   *    crea un elemento del tipo div para "pizza".
-   *    crea un elemento del tipo div para mostrar el precio "priceElement"
-   *    toma la propiedad selected y la transforma en un proxy de si mismo
-   *      haciendo que recorra los elementos de selected cambiando sus propiedades 
-   *      y clonando su elemento html para agregarlo al elemento "pizza"
-   */
-
-
   _createClass(Pizza, [{
+    key: 'setMassPrice',
+    value: function setMassPrice(newMassPrice) {
+      this.massPrice = newMassPrice;
+      this.pizzaElement = this.initPizza();
+    }
+
+    /**
+     * inicializador de pizzeria
+     * 
+     * Este metodo:
+     *    crea un elemento del tipo div para "pizza".
+     *    crea un elemento del tipo div para mostrar el precio "priceElement"
+     *    toma la propiedad selected y la transforma en un proxy de si mismo
+     *      haciendo que recorra los elementos de selected cambiando sus propiedades 
+     *      y clonando su elemento html para agregarlo al elemento "pizza"
+     */
+
+  }, {
     key: 'initPizza',
     value: function initPizza() {
       var _this2 = this;
 
-      var defaulPrice = 3000; // asigna valor por defecto
+      var defaulPrice = this.massPrice; // asigna valor por defecto
       var pizzaPrice = defaulPrice;
-
-      var pizza = this.html.create({ // elemento pizza que contiene la maza
-        type: 'div',
-        className: 'pizza'
-      });
-
-      this.priceElement = this.html.create({ // solo muestra el precio
-        type: 'div',
-        className: 'pizza-price',
-        innerText: pizzaPrice
-      });
-
-      Object.assign(pizza.style, {
-        backgroundImage: 'url(image/base.png)'
-      });
 
       this.selected = new Proxy(this.selected, {
         set: function set(target, property, value, receiver) {
           target[property] = value;
-          pizza.innerHTML = '';
+          _this2.pizzaElement.innerHTML = '';
           pizzaPrice = defaulPrice;
           if (property === 'length') {
             _this2.selected.forEach(function (selected) {
               var clone = _this2.getTransparentClone(selected);
-              pizza.appendChild(clone);
+              _this2.pizzaElement.appendChild(clone);
 
               pizzaPrice += selected.ingredient.price;
             });
@@ -252,7 +281,11 @@ var Pizza = exports.Pizza = function (_Ingredients) {
         }
       });
 
-      return pizza;
+      // esto reinicia el precio y el contenido de la pizza
+      this.selected['length'] = this.selected.length;
+
+      this.priceElement.innerText = pizzaPrice;
+      return this.pizzaElement;
     }
 
     /**
@@ -329,7 +362,7 @@ var Ingredients = exports.Ingredients = function () {
       var element = this.ingredientsElement;
       element.appendChild(this.html.create({
         type: 'h1',
-        className: 'ingredients__title',
+        className: 'pizzeria__ingredients-title',
         innerText: 'Ingredients'
       }));
 
@@ -379,7 +412,7 @@ var Ingredient = exports.Ingredient = function () {
     this.ingredient = ingredient;
     this.element = this.html.create({
       type: 'div',
-      className: 'ingredients__item ' + this.ingredient.name,
+      className: 'pizzeria__ingredients__item ' + this.ingredient.name,
       innerText: this.ingredient.name
     });
     this.initIngredient();
@@ -392,7 +425,7 @@ var Ingredient = exports.Ingredient = function () {
       element.innerHTML = this.ingredient.name;
       element.appendChild(this.html.create({
         type: 'span',
-        className: 'checked'
+        className: 'pizzeria__ingredients__item-checked'
       }));
 
       Object.assign(element.style, {
@@ -464,6 +497,91 @@ var data = exports.data = [{
   "image": "./image/rucula.png",
   "price": 100,
   "priority": 7
+}];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Masas = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _htmlCreator = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Masas = exports.Masas = function () {
+  function Masas(masas) {
+    _classCallCheck(this, Masas);
+
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.masas = masas;
+    this.masasElement = this.html.create({
+      type: 'div',
+      className: 'pizzeria__masas'
+    });
+    this.masasElement = this.initMasas();
+  }
+
+  _createClass(Masas, [{
+    key: 'initMasas',
+    value: function initMasas() {
+      var _this = this;
+
+      this.masas.forEach(function (masa, i) {
+        var masaElement = _this.creteContainer(masa);
+        _this.masasElement.appendChild(masaElement);
+      });
+      return this.masasElement;
+    }
+  }, {
+    key: 'creteContainer',
+    value: function creteContainer(masa) {
+      var container = this.html.create({
+        type: 'div',
+        className: 'pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
+        innerText: masa.name,
+        value: masa.price
+      });
+      Object.assign(container.style, {
+        backgroundImage: 'url(' + masa.image + ')'
+      });
+      return container;
+    }
+  }]);
+
+  return Masas;
+}();
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var dataMasas = exports.dataMasas = [{
+  "name": "Normal",
+  "image": "./image/normal.png",
+  "price": 3500
+}, {
+  "name": "Borde Queso",
+  "image": "./image/border-queso.png",
+  "price": 4000
+}, {
+  "name": "Delgada",
+  "image": "./image/delgada.png",
+  "price": 3000
 }];
 
 /***/ })

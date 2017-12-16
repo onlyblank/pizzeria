@@ -8,7 +8,7 @@ export class Ingredient {
     this.ingredient = ingredient;
     this.element = this.html.create({
       type: 'div',
-      className: `ingredients__item ${this.ingredient.name}`,
+      className: `pizzeria__ingredients__item ${this.ingredient.name}`,
       innerText: this.ingredient.name
     });
     this.initIngredient();
@@ -19,7 +19,7 @@ export class Ingredient {
     element.innerHTML = this.ingredient.name;
     element.appendChild(this.html.create({
       type: 'span',
-      className: 'checked'
+      className: 'pizzeria__ingredients__item-checked'
     }));
 
     Object.assign(element.style, {

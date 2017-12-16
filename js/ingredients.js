@@ -21,7 +21,7 @@ export class Ingredients {
     let element = this.ingredientsElement;
     element.appendChild(this.html.create({
       type: 'h1',
-      className: 'ingredients__title',
+      className: 'pizzeria__ingredients-title',
       innerText: 'Ingredients'
     }));
 

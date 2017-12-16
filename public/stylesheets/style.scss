@@ -1,6 +1,8 @@
 .pizzeria {
   display: flex;
-  .pizza-price {
+  flex-wrap: wrap;
+  width: 650px;
+  &__pizza-price {
     height: 500px;
     width: 500px;
     /* border-radius: 100%; */
@@ -14,9 +16,11 @@
     padding: 20px;
     box-sizing: border-box;
   }
-  &>.ingredients {
-    margin-top: 25px;
-    .ingredients__item {
+  &__ingredients {
+    display: inline-block;
+    flex-grow: 1;
+    flex-basis: calc(100% / 3);
+    &__item {
       padding: 5px 0;
       border-bottom: 2px solid silver;
       min-height: 25px;
@@ -29,7 +33,7 @@
       align-items: center;
       justify-content: flex-end;
       text-transform: capitalize;
-      .checked {
+      &-checked {
         opacity: 0;
         transition: all 250ms;
         width: 0;
@@ -53,7 +57,7 @@
           border-left-color: transparent;
         }
       }
-      &.selected .checked {
+      &.selected &-checked {
         opacity: 1;
         margin: 0 10px;
         width: auto;
@@ -64,7 +68,7 @@
       }
     }
   }
-  &>.pizza {
+  &__pizza {
     height: 500px;
     width: 500px;
     border-radius: 100%;
@@ -73,13 +77,35 @@
     overflow: hidden;
     background-position: center;
     background-size: cover;
-    .ingredients__item {
+    display: inline-block;
+    flex-grow: 1;
+    flex-basis: calc(100% / 2);
+    .pizzeria__ingredients__item {
       position: absolute;
       height: 500px;
       width: 500px;
       background-size: 100%;
       background-position-x: 520px;
       border-radius: 100%;
+      border:none;
+    }
+  }
+  &__masas{
+    display: flex;
+    flex-wrap: wrap;
+    &-item{
+      flex-grow: 1;
+      flex-basis: calc(100% / 3);
+      width: 200px;
+      height: 110px;
+      background-position-y: 20px;
+      background-size: 200px;
+      background-repeat: no-repeat;
+      margin-top: 20px;
+      display: inline-block;
+      flex-grow: 1;
+      flex-basis: calc(100% / 3);
+      cursor: pointer;
     }
   }
 }

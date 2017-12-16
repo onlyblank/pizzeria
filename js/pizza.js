@@ -12,7 +12,21 @@ export class Pizza extends Ingredients {
   constructor() {
     super(data);
     this.html = htmlCreator();
-    this.priceElement = null;
+    this.massPrice = 0;
+    this.pizzaElement = this.html.create({ // elemento pizza que contiene la maza
+      type: 'div',
+      className: 'pizzeria__pizza'
+    });
+    this.priceElement = this.html.create({ // solo muestra el precio
+      type: 'div',
+      className: 'pizzeria__pizza-price',
+      innerText: this.massPrice
+    });
+    this.pizzaElement = this.initPizza();
+  }
+
+  setMassPrice(newMassPrice) {
+    this.massPrice = newMassPrice;
     this.pizzaElement = this.initPizza();
   }
 
@@ -27,33 +41,18 @@ export class Pizza extends Ingredients {
    *      y clonando su elemento html para agregarlo al elemento "pizza"
    */
   initPizza() {
-    const defaulPrice = 3000; // asigna valor por defecto
+    const defaulPrice = this.massPrice; // asigna valor por defecto
     let pizzaPrice = defaulPrice;
-
-    const pizza = this.html.create({ // elemento pizza que contiene la maza
-      type: 'div',
-      className: 'pizza'
-    });
-
-    this.priceElement = this.html.create({ // solo muestra el precio
-      type: 'div',
-      className: 'pizza-price',
-      innerText: pizzaPrice
-    });
-
-    Object.assign(pizza.style, {
-      backgroundImage: `url(image/base.png)`
-    });
 
     this.selected = new Proxy(this.selected, {
       set: (target, property, value, receiver) => {
         target[property] = value;
-        pizza.innerHTML = '';
+        this.pizzaElement.innerHTML = '';
         pizzaPrice = defaulPrice;
         if (property === 'length') {
           this.selected.forEach(selected => {
             const clone = this.getTransparentClone(selected);
-            pizza.appendChild(clone);
+            this.pizzaElement.appendChild(clone);
 
             pizzaPrice += selected.ingredient.price;
           });
@@ -62,8 +61,12 @@ export class Pizza extends Ingredients {
         return true;
       }
     });
+    
+    // esto reinicia el precio y el contenido de la pizza
+    this.selected['length'] = this.selected.length;
 
-    return pizza;
+    this.priceElement.innerText = pizzaPrice;
+    return this.pizzaElement;
   }
 
   /**
