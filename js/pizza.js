@@ -17,6 +17,7 @@ export class Pizza extends Ingredients {
       className: 'pizzeria__pizza-price',
       innerText: this.massPrice
     });
+    this.resetElement = this.reset();
     this.pizzaElement = this.initPizza();
   }
 
@@ -63,9 +64,20 @@ export class Pizza extends Ingredients {
     this.selected['length'] = this.selected.length;
 
     this.priceElement.innerText = price.formatter.format(pizzaPrice);
+    this.resetElement.innerHTML = '<button>Reset Pizza</button>';
     return this.pizzaElement;
   }
 
+  reset(){
+    let element = this.html.create({
+      type: 'div',
+      className: 'pizzeria__reset'
+    });
+    element.addEventListener('click', (event) => {
+      alert("click reset");
+    });
+    return element;
+  }
   /**
    * @param {item} element
    * item contiene:
@@ -90,4 +102,5 @@ export class Pizza extends Ingredients {
     });
     return clone;
   }
+
 }

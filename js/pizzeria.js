@@ -11,7 +11,6 @@ export class Pizzeria {
     this.masas = new Masas(dataMasas);
     this.price = new Util('es-CL','cpl');
     this.pizzeriaElement = this.initPizzeria();
-
   }
   initPizzeria() {
     const pizzeria = this.html.create({ // contienen a todos los demas elementos
@@ -34,6 +33,7 @@ export class Pizzeria {
     pizzeria.appendChild(this.pizza.priceElement);
     pizzeria.appendChild(this.pizza.ingredientsElement);
     pizzeria.appendChild(this.masas.masasElement);
+    pizzeria.appendChild(this.pizza.resetElement);
     return pizzeria;
   }
   setMasaPizza(masa) {

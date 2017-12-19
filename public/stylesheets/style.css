@@ -2,6 +2,17 @@
   display: flex;
   flex-wrap: wrap;
   width: 650px; }
+  .pizzeria__reset > button {
+    background-color: #e7e7e7;
+    color: black;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer; }
   .pizzeria__pizza-price {
     left: 32%;
     bottom: 40%;
