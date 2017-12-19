@@ -7,7 +7,7 @@ export class Masas {
     this.masas = masas;
     this.masasElement = this.html.create({
       type: 'div',
-      className: 'row center-xs pizzeria__masas'
+      className: 'pizzeria__masas'
     });
     this.masasElement = this.initMasas();
   }
@@ -23,7 +23,7 @@ export class Masas {
   creteContainer(masa) {
     const container = this.html.create({
       type: 'div',
-      className: `col-xs-4 pizzeria__masas-item ${masa.name.replace(/\s/g, '-')}`,
+      className: `pizzeria__masas-item ${masa.name.replace(/\s/g, '-')}`,
       innerText: masa.name,
       value: masa.price
     });

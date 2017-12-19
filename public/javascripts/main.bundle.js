@@ -272,7 +272,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
     });
     _this.priceElement = _this.html.create({ // solo muestra el precio
       type: 'div',
-      className: 'col-xs-12 pizzeria__pizza-price',
+      className: 'pizzeria__pizza-price',
       innerText: _this.massPrice
     });
     _this.pizzaElement = _this.initPizza();
@@ -568,7 +568,7 @@ var Masas = exports.Masas = function () {
     this.masas = masas;
     this.masasElement = this.html.create({
       type: 'div',
-      className: 'row center-xs pizzeria__masas'
+      className: 'pizzeria__masas'
     });
     this.masasElement = this.initMasas();
   }
@@ -589,7 +589,7 @@ var Masas = exports.Masas = function () {
     value: function creteContainer(masa) {
       var container = this.html.create({
         type: 'div',
-        className: 'col-xs-4 pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
+        className: 'pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
         innerText: masa.name,
         value: masa.price
       });
