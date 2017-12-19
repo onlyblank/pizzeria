@@ -1,9 +1,5 @@
-import {
-  htmlCreator
-} from './html-creator.service';
-import {
-  Ingredient
-} from './ingredient';
+import { htmlCreator } from './html-creator.service';
+import { Ingredient } from './ingredient';
 
 export class Ingredients {
   constructor(ingredients) {
@@ -37,7 +33,6 @@ export class Ingredients {
       });
       element.appendChild(newIngredient.element);
     });
-
     return element;
   }
 }

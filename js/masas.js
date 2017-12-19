@@ -1,7 +1,4 @@
-import {
-  htmlCreator
-} from './html-creator.service';
-
+import { htmlCreator } from './html-creator.service';
 
 export class Masas {
 
@@ -10,7 +7,7 @@ export class Masas {
     this.masas = masas;
     this.masasElement = this.html.create({
       type: 'div',
-      className: 'pizzeria__masas'
+      className: 'row center-xs pizzeria__masas'
     });
     this.masasElement = this.initMasas();
   }
@@ -26,7 +23,7 @@ export class Masas {
   creteContainer(masa) {
     const container = this.html.create({
       type: 'div',
-      className: `pizzeria__masas-item ${masa.name.replace(/\s/g, '-')}`,
+      className: `col-xs-4 pizzeria__masas-item ${masa.name.replace(/\s/g, '-')}`,
       innerText: masa.name,
       value: masa.price
     });
