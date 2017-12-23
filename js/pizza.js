@@ -1,12 +1,7 @@
-import {
-  Ingredients
-} from './ingredients';
-import {
-  data
-} from './ingredients.data';
-import {
-  htmlCreator
-} from './html-creator.service';
+import { Ingredients } from './ingredients';
+import { data } from './services/ingredients.data';
+import { htmlCreator } from './html-creator.service';
+import { Util } from './utils/utils.price';
 
 export class Pizza extends Ingredients {
   constructor() {
@@ -26,7 +21,7 @@ export class Pizza extends Ingredients {
   }
 
   setMassPrice(newMassPrice) {
-    this.massPrice = newMassPrice;
+    this.massPrice = parseInt(newMassPrice.replace(".",""));
     this.pizzaElement = this.initPizza();
   }
 
@@ -42,6 +37,7 @@ export class Pizza extends Ingredients {
    */
   initPizza() {
     const defaulPrice = this.massPrice; // asigna valor por defecto
+    const price = new Util('es-CL','cpl');
     let pizzaPrice = defaulPrice;
 
     this.selected = new Proxy(this.selected, {
@@ -49,15 +45,16 @@ export class Pizza extends Ingredients {
         target[property] = value;
         this.pizzaElement.innerHTML = '';
         pizzaPrice = defaulPrice;
+        
         if (property === 'length') {
           this.selected.forEach(selected => {
             const clone = this.getTransparentClone(selected);
             this.pizzaElement.appendChild(clone);
-
             pizzaPrice += selected.ingredient.price;
           });
         }
-        this.priceElement.innerText = pizzaPrice;
+
+        this.priceElement.innerText = price.formatter.format(pizzaPrice);
         return true;
       }
     });
@@ -65,7 +62,7 @@ export class Pizza extends Ingredients {
     // esto reinicia el precio y el contenido de la pizza
     this.selected['length'] = this.selected.length;
 
-    this.priceElement.innerText = pizzaPrice;
+    this.priceElement.innerText = price.formatter.format(pizzaPrice);
     return this.pizzaElement;
   }
 

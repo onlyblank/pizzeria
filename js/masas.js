@@ -1,7 +1,4 @@
-import {
-  htmlCreator
-} from './html-creator.service';
-
+import { htmlCreator } from './html-creator.service';
 
 export class Masas {
 

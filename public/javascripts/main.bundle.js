@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -105,7 +105,43 @@ function htmlCreator() {
 "use strict";
 
 
-var _pizzeria = __webpack_require__(2);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Util = exports.Util = function () {
+    function Util(country, money) {
+        _classCallCheck(this, Util);
+
+        this.country = country;
+        this.money = money;
+        this.formatter = this.formatter();
+    }
+
+    _createClass(Util, [{
+        key: "formatter",
+        value: function formatter() {
+            return new Intl.NumberFormat(this.country, {
+                minimumFractionDigits: 0
+            });
+        }
+    }]);
+
+    return Util;
+}();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pizzeria = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -118,7 +154,7 @@ var Main = function Main() {
 new Main();
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -131,13 +167,15 @@ exports.Pizzeria = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _pizza = __webpack_require__(3);
+var _pizza = __webpack_require__(4);
 
 var _htmlCreator = __webpack_require__(0);
 
-var _masas = __webpack_require__(7);
+var _masas = __webpack_require__(8);
 
-var _masaTypes = __webpack_require__(8);
+var _masaTypes = __webpack_require__(9);
+
+var _utils = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -148,6 +186,7 @@ var Pizzeria = exports.Pizzeria = function () {
     this.html = (0, _htmlCreator.htmlCreator)();
     this.pizza = new _pizza.Pizza();
     this.masas = new _masas.Masas(_masaTypes.dataMasas);
+    this.price = new _utils.Util('es-CL', 'cpl');
     this.pizzeriaElement = this.initPizzeria();
   }
 
@@ -156,15 +195,17 @@ var Pizzeria = exports.Pizzeria = function () {
     value: function initPizzeria() {
       var pizzeria = this.html.create({ // contienen a todos los demas elementos
         type: 'div',
-        className: 'pizzeria'
+        className: 'row pizzeria'
       });
       var masas = this.masas.masasElement.childNodes;
 
       masas.forEach(this.setMasaPizza.bind(this));
+
       Object.assign(this.pizza.pizzaElement.style, {
         backgroundImage: 'url(' + this.masas.masas[0].image + ')'
       });
-      this.pizza.setMassPrice(this.masas.masas[0].price);
+
+      this.pizza.setMassPrice(this.price.formatter.format(this.masas.masas[0].price));
       // unimos elementos dentro de pizzeria
       pizzeria.appendChild(this.pizza.pizzaElement);
       pizzeria.appendChild(this.pizza.priceElement);
@@ -176,11 +217,10 @@ var Pizzeria = exports.Pizzeria = function () {
     key: 'setMasaPizza',
     value: function setMasaPizza(masa) {
       var _self = this;
-      masa.addEventListener('click', function (event, newww) {
-        console.log(newww);
+      masa.addEventListener('click', function (event) {
         var target = event.target;
         _self.pizza.pizzaElement.style.backgroundImage = target.style.backgroundImage;
-        _self.pizza.setMassPrice(target.value);
+        _self.pizza.setMassPrice(_self.price.formatter.format(target.value));
       });
     }
   }]);
@@ -189,7 +229,7 @@ var Pizzeria = exports.Pizzeria = function () {
 }();
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -202,11 +242,13 @@ exports.Pizza = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ingredients = __webpack_require__(4);
+var _ingredients = __webpack_require__(5);
 
-var _ingredients2 = __webpack_require__(6);
+var _ingredients2 = __webpack_require__(7);
 
 var _htmlCreator = __webpack_require__(0);
+
+var _utils = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -240,7 +282,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
   _createClass(Pizza, [{
     key: 'setMassPrice',
     value: function setMassPrice(newMassPrice) {
-      this.massPrice = newMassPrice;
+      this.massPrice = parseInt(newMassPrice.replace(".", ""));
       this.pizzaElement = this.initPizza();
     }
 
@@ -261,6 +303,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       var _this2 = this;
 
       var defaulPrice = this.massPrice; // asigna valor por defecto
+      var price = new _utils.Util('es-CL', 'cpl');
       var pizzaPrice = defaulPrice;
 
       this.selected = new Proxy(this.selected, {
@@ -268,15 +311,16 @@ var Pizza = exports.Pizza = function (_Ingredients) {
           target[property] = value;
           _this2.pizzaElement.innerHTML = '';
           pizzaPrice = defaulPrice;
+
           if (property === 'length') {
             _this2.selected.forEach(function (selected) {
               var clone = _this2.getTransparentClone(selected);
               _this2.pizzaElement.appendChild(clone);
-
               pizzaPrice += selected.ingredient.price;
             });
           }
-          _this2.priceElement.innerText = pizzaPrice;
+
+          _this2.priceElement.innerText = price.formatter.format(pizzaPrice);
           return true;
         }
       });
@@ -284,7 +328,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       // esto reinicia el precio y el contenido de la pizza
       this.selected['length'] = this.selected.length;
 
-      this.priceElement.innerText = pizzaPrice;
+      this.priceElement.innerText = price.formatter.format(pizzaPrice);
       return this.pizzaElement;
     }
 
@@ -321,7 +365,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
 }(_ingredients.Ingredients);
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -336,7 +380,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _htmlCreator = __webpack_require__(0);
 
-var _ingredient = __webpack_require__(5);
+var _ingredient = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -378,7 +422,6 @@ var Ingredients = exports.Ingredients = function () {
         });
         element.appendChild(newIngredient.element);
       });
-
       return element;
     }
   }]);
@@ -387,7 +430,7 @@ var Ingredients = exports.Ingredients = function () {
 }();
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -448,7 +491,7 @@ var Ingredient = exports.Ingredient = function () {
 }();
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -500,7 +543,7 @@ var data = exports.data = [{
 }];
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -561,7 +604,7 @@ var Masas = exports.Masas = function () {
 }();
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
