@@ -71,13 +71,23 @@ export class Pizza extends Ingredients {
   reset(){
     let element = this.html.create({
       type: 'div',
-      className: 'pizzeria__reset'
+      className: 'pizzeria__pizza_reset'
     });
+
     element.addEventListener('click', (event) => {
-      alert("click reset");
+      document.querySelectorAll('.selected').forEach(function(button) {
+        button.classList.remove("selected");
+     });
+     this.selected['length'] = 0;   
     });
     return element;
   }
+
+  getIngredientSelected(){
+    let ingredientsSelected = document.getElementsByClassName("pizzeria__ingredients__item").children;
+    return ingredientsSelected;
+  }
+
   /**
    * @param {item} element
    * item contiene:

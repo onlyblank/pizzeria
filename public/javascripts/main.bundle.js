@@ -337,15 +337,28 @@ var Pizza = exports.Pizza = function (_Ingredients) {
   }, {
     key: 'reset',
     value: function reset() {
+      var _this3 = this;
+
       var element = this.html.create({
         type: 'div',
-        className: 'pizzeria__reset'
+        className: 'pizzeria__pizza_reset'
       });
+
       element.addEventListener('click', function (event) {
-        alert("click reset");
+        document.querySelectorAll('.selected').forEach(function (button) {
+          button.classList.remove("selected");
+        });
+        _this3.selected['length'] = 0;
       });
       return element;
     }
+  }, {
+    key: 'getIngredientSelected',
+    value: function getIngredientSelected() {
+      var ingredientsSelected = document.getElementsByClassName("pizzeria__ingredients__item").children;
+      return ingredientsSelected;
+    }
+
     /**
      * @param {item} element
      * item contiene:

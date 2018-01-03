@@ -2,10 +2,10 @@
   display: flex;
   flex-wrap: wrap;
   width: 650px;
-  &__pizzeria__reset > button{
-    background-color: #e7e7e7; 
-    color: black;
+  &__pizza_reset >button{
+    background-color: #4CAF50;
     border: none;
+    color: white;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -15,8 +15,8 @@
     cursor: pointer;
   }
   &__pizza-price {
-    left: 32%;
-    bottom: 40%;
+    left: 40%;
+    bottom: 30%;
     margin-left: 0;
     overflow: hidden;
     background-position: center;
