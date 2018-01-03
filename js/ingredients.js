@@ -8,7 +8,7 @@ export class Ingredients {
     this.selected = [];
     this.ingredientsElement = this.html.create({
       type: 'div',
-      className: 'ingredients',
+      className: 'pizzeria__ingredients',
     });
     this.initIngredients();
   }

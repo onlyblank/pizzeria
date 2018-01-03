@@ -27,7 +27,9 @@
   .pizzeria__ingredients {
     display: inline-block;
     flex-grow: 1;
-    flex-basis: calc(100% / 3); }
+    flex-basis: calc(100% / 90);
+    margin-left: 10px;
+    margin-right: 10px; }
     .pizzeria__ingredients__item {
       padding: 5px 0;
       border-bottom: 2px solid silver;
@@ -92,19 +94,25 @@
       border: none; }
   .pizzeria__masas {
     display: flex;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    flex-basis: calc(100% / 1); }
     .pizzeria__masas-item {
-      flex-grow: 1;
-      flex-basis: calc(100% / 3);
-      width: 200px;
-      height: 110px;
-      background-position-y: 20px;
-      background-size: 200px;
+      height: 100px;
+      background-position-y: -50%;
+      background-size: 75%;
       background-repeat: no-repeat;
       margin-top: 20px;
       display: inline-block;
       flex-grow: 1;
       flex-basis: calc(100% / 3);
       cursor: pointer; }
+
+@media screen and (max-width: 650px) {
+  .pizzeria {
+    width: 500px; }
+    .pizzeria__pizza {
+      flex-basis: calc(100% / 1); }
+    .pizzeria__masas-item {
+      background-size: 100%; } }
 
 /*# sourceMappingURL=style.css.map */
