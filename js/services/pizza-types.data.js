@@ -1,33 +1,44 @@
-export const ingredients = [
-  {
+export const hamaica = [{
     "name": "tomate",
     "image": "./image/tomate.png",
     "price": 100,
-    "priority":2
+    "priority": 2
   },
   {
     "name": "champinon",
     "image": "./image/champinon.png",
     "price": 100,
-    "priority":8
-  },
-  {
+    "priority": 8
+  }, {
     "name": "queso",
     "image": "./image/queso.png",
     "price": 100,
-    "priority":1
+    "priority": 1
+  }, {
+    "name": "aceitunas",
+    "image": "./image/aceitunas.png",
+    "price": 100,
+    "priority": 6
+  }
+];
+
+export const peperoni = [{
+    "name": "queso",
+    "image": "./image/queso.png",
+    "price": 100,
+    "priority": 1
   },
   {
     "name": "aceitunas",
     "image": "./image/aceitunas.png",
     "price": 100,
-    "priority":6
+    "priority": 6
   },
   {
     "name": "peperoni",
     "image": "./image/peperoni.png",
     "price": 100,
-    "priority":4
+    "priority": 4
   },
   {
     "name": "jamon",
@@ -35,16 +46,4 @@ export const ingredients = [
     "price": 100,
     "priority": 3
   },
-  {
-    "name": "pina",
-    "image": "./image/pina.png",
-    "price": 100,
-    "priority":5
-  },
-  {
-    "name": "rucula",
-    "image": "./image/rucula.png",
-    "price": 100,
-    "priority": 7
-  }
 ]

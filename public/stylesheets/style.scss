@@ -4,9 +4,25 @@
   width: 700px;
   margin: 0 auto;
   position: relative;
+  &__pizza_collection{
+    display: inline-block;
+    flex-grow: 1;
+    flex-basis: calc(100% / 90);
+    margin-left: 10px;
+    margin-right: 10px;
+    .pizzeria__pizza {
+      height: 300px;
+      width: 300px;
+      .pizzeria__ingredients__item{
+        width: 300px;
+        height: 300px;
+        background-position-x: 310px;
+      }
+    }
+  }
   &__pizza-price {
-    left: 32%;
-    bottom: 40%;
+    left: 0;
+    top: 0;
     margin-left: 0;
     overflow: hidden;
     background-position: center;

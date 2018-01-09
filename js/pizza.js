@@ -1,13 +1,20 @@
-import { Ingredients } from './ingredients';
-import { data } from './services/ingredients.data';
-import { htmlCreator } from './html-creator.service';
-import { Util } from './utils/utils.price';
+import {
+  Ingredients
+} from './ingredients';
+import {
+  htmlCreator
+} from './html-creator.service';
+import {
+  Util
+} from './utils/utils.price';
 
 export class Pizza extends Ingredients {
-  constructor() {
-    super(data);
+  constructor(ingredients) {
+    super(ingredients);
+    this.util = new Util('es-CL', 'cpl');
     this.html = htmlCreator();
     this.massPrice = 0;
+    this.mass = {};
     this.pizzaElement = this.html.create({ // elemento pizza que contiene la maza
       type: 'div',
       className: 'pizzeria__pizza'
@@ -20,11 +27,26 @@ export class Pizza extends Ingredients {
     this.pizzaElement = this.initPizza();
   }
 
-  setMassPrice(newMassPrice) {
-    this.massPrice = parseInt(newMassPrice.replace(".",""));
-    this.pizzaElement = this.initPizza();
+  setMass(masaElement) {
+    this.mass = masaElement;
+    this.massPrice = masaElement.masa.price;
+    Object.assign(this.pizzaElement.style, {
+      backgroundImage: `url(${masaElement.masa.image})`,
+    });
+    this.initPizza();
   }
 
+  setSelect(ingredients) {
+    this.setIngredients(ingredients);
+    this.initPizza();
+  }
+
+  setPizza(ingredients, mass) {
+    this.massPrice = 0;
+    this.setIngredients(ingredients);
+    this.setMass(mass);
+    this.initPizza();
+  }
   /**
    * inicializador de pizzeria
    * 
@@ -36,29 +58,27 @@ export class Pizza extends Ingredients {
    *      y clonando su elemento html para agregarlo al elemento "pizza"
    */
   initPizza() {
-    const defaulPrice = this.massPrice; // asigna valor por defecto
-    const price = new Util('es-CL','cpl');
-    let pizzaPrice = defaulPrice;
+    const price = new Util('es-CL', 'cpl');
+    let pizzaPrice = this.massPrice; // asigna valor por defecto
 
     this.selected = new Proxy(this.selected, {
       set: (target, property, value, receiver) => {
         target[property] = value;
         this.pizzaElement.innerHTML = '';
-        pizzaPrice = defaulPrice;
-        
+        pizzaPrice = this.massPrice;
         if (property === 'length') {
           this.selected.forEach(selected => {
             const clone = this.getTransparentClone(selected);
             this.pizzaElement.appendChild(clone);
-            pizzaPrice += selected.ingredient.price;
+            pizzaPrice += selected.element.ingredient.price;
           });
         }
 
-        this.priceElement.innerText = price.formatter.format(pizzaPrice);
+        this.priceElement.innerText =  price.formatter.format(pizzaPrice);
         return true;
       }
     });
-    
+
     // esto reinicia el precio y el contenido de la pizza
     this.selected['length'] = this.selected.length;
 
@@ -85,8 +105,8 @@ export class Pizza extends Ingredients {
     clone.innerText = '';
     Object.assign(clone.style, {
       backgroundColor: 'transparent',
-      backgroundImage: `url(${selected.ingredient.image})`,
-      zIndex: selected.ingredient.priority,
+      backgroundImage: `url(${selected.element.ingredient.image})`,
+      zIndex: selected.element.ingredient.priority,
     });
     return clone;
   }

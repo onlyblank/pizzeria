@@ -76,23 +76,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.htmlCreator = htmlCreator;
 function htmlCreator() {
   return {
-    create: function create(_ref) {
-      var _ref$type = _ref.type,
-          type = _ref$type === undefined ? 'div' : _ref$type,
-          _ref$className = _ref.className,
-          className = _ref$className === undefined ? '' : _ref$className,
-          _ref$innerText = _ref.innerText,
-          innerText = _ref$innerText === undefined ? '' : _ref$innerText,
-          _ref$name = _ref.name,
-          name = _ref$name === undefined ? '' : _ref$name,
-          _ref$value = _ref.value,
-          value = _ref$value === undefined ? null : _ref$value;
-
-      var element = document.createElement(type);
-      element.innerText = innerText;
-      element.className = className;
-      element.name = name;
-      element.value = value;
+    create: function create(config) {
+      var element = document.createElement(config.type);
+      Object.assign(element, config);
       return element;
     }
   };
@@ -171,11 +157,15 @@ var _pizza = __webpack_require__(4);
 
 var _htmlCreator = __webpack_require__(0);
 
-var _masas = __webpack_require__(8);
+var _masas = __webpack_require__(7);
 
-var _masaTypes = __webpack_require__(9);
+var _masaTypes = __webpack_require__(8);
 
 var _utils = __webpack_require__(1);
+
+var _pizzaTypes = __webpack_require__(9);
+
+var _ingredients = __webpack_require__(10);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -184,7 +174,9 @@ var Pizzeria = exports.Pizzeria = function () {
     _classCallCheck(this, Pizzeria);
 
     this.html = (0, _htmlCreator.htmlCreator)();
-    this.pizza = new _pizza.Pizza();
+    this.pizza = new _pizza.Pizza(_ingredients.ingredients);
+    this.hamaica = new _pizza.Pizza(_pizzaTypes.hamaica);
+    this.peperoni = new _pizza.Pizza(_pizzaTypes.peperoni);
     this.masas = new _masas.Masas(_masaTypes.dataMasas);
     this.price = new _utils.Util('es-CL', 'cpl');
     this.pizzeriaElement = this.initPizzeria();
@@ -193,24 +185,43 @@ var Pizzeria = exports.Pizzeria = function () {
   _createClass(Pizzeria, [{
     key: 'initPizzeria',
     value: function initPizzeria() {
+      var _this = this;
+
+      var _self = this;
+      var borderQueso = 1;
+      var normal = 0;
       var pizzeria = this.html.create({ // contienen a todos los demas elementos
         type: 'div',
         className: 'row pizzeria'
       });
+      var pizzaCollection = this.html.create({
+        type: 'div',
+        className: 'pizzeria__pizza_collection'
+      });
       var masas = this.masas.masasElement.childNodes;
 
       masas.forEach(this.setMasaPizza.bind(this));
-
-      Object.assign(this.pizza.pizzaElement.style, {
-        backgroundImage: 'url(' + this.masas.masas[0].image + ')'
+      this.hamaica.setSelect(_pizzaTypes.hamaica);
+      this.hamaica.setMass(this.masas.masasElement.childNodes[borderQueso]);
+      this.hamaica.pizzaElement.addEventListener('click', function () {
+        _self.selectPizzaType(_this.hamaica, _pizzaTypes.hamaica);
       });
 
-      this.pizza.setMassPrice(this.price.formatter.format(this.masas.masas[0].price));
+      this.peperoni.setSelect(_pizzaTypes.peperoni);
+      this.peperoni.setMass(this.masas.masasElement.childNodes[normal]);
+      this.peperoni.pizzaElement.addEventListener('click', function () {
+        _self.selectPizzaType(_this.peperoni, _pizzaTypes.peperoni);
+      });
+
+      this.pizza.setMass(this.masas.masasElement.childNodes[normal]);
       // unimos elementos dentro de pizzeria
+      pizzaCollection.appendChild(this.hamaica.pizzaElement);
+      pizzaCollection.appendChild(this.peperoni.pizzaElement);
       pizzeria.appendChild(this.pizza.pizzaElement);
       pizzeria.appendChild(this.pizza.priceElement);
-      pizzeria.appendChild(this.pizza.ingredientsElement);
+      pizzeria.appendChild(this.pizza.ingredients.element);
       pizzeria.appendChild(this.masas.masasElement);
+      pizzeria.appendChild(pizzaCollection);
       return pizzeria;
     }
   }, {
@@ -218,10 +229,14 @@ var Pizzeria = exports.Pizzeria = function () {
     value: function setMasaPizza(masa) {
       var _self = this;
       masa.addEventListener('click', function (event) {
-        var target = event.target;
-        _self.pizza.pizzaElement.style.backgroundImage = target.style.backgroundImage;
-        _self.pizza.setMassPrice(_self.price.formatter.format(target.value));
+        _self.pizza.setMass(masa);
       });
+    }
+  }, {
+    key: 'selectPizzaType',
+    value: function selectPizzaType(pizza, ingredients) {
+      this.pizza.massPrice = 0;
+      this.pizza.setPizza(ingredients, pizza.mass);
     }
   }]);
 
@@ -244,8 +259,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _ingredients = __webpack_require__(5);
 
-var _ingredients2 = __webpack_require__(7);
-
 var _htmlCreator = __webpack_require__(0);
 
 var _utils = __webpack_require__(1);
@@ -259,13 +272,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Pizza = exports.Pizza = function (_Ingredients) {
   _inherits(Pizza, _Ingredients);
 
-  function Pizza() {
+  function Pizza(ingredients) {
     _classCallCheck(this, Pizza);
 
-    var _this = _possibleConstructorReturn(this, (Pizza.__proto__ || Object.getPrototypeOf(Pizza)).call(this, _ingredients2.data));
+    var _this = _possibleConstructorReturn(this, (Pizza.__proto__ || Object.getPrototypeOf(Pizza)).call(this, ingredients));
 
+    _this.util = new _utils.Util('es-CL', 'cpl');
     _this.html = (0, _htmlCreator.htmlCreator)();
     _this.massPrice = 0;
+    _this.mass = {};
     _this.pizzaElement = _this.html.create({ // elemento pizza que contiene la maza
       type: 'div',
       className: 'pizzeria__pizza'
@@ -280,12 +295,29 @@ var Pizza = exports.Pizza = function (_Ingredients) {
   }
 
   _createClass(Pizza, [{
-    key: 'setMassPrice',
-    value: function setMassPrice(newMassPrice) {
-      this.massPrice = parseInt(newMassPrice.replace(".", ""));
-      this.pizzaElement = this.initPizza();
+    key: 'setMass',
+    value: function setMass(masaElement) {
+      this.mass = masaElement;
+      this.massPrice = masaElement.masa.price;
+      Object.assign(this.pizzaElement.style, {
+        backgroundImage: 'url(' + masaElement.masa.image + ')'
+      });
+      this.initPizza();
     }
-
+  }, {
+    key: 'setSelect',
+    value: function setSelect(ingredients) {
+      this.setIngredients(ingredients);
+      this.initPizza();
+    }
+  }, {
+    key: 'setPizza',
+    value: function setPizza(ingredients, mass) {
+      this.massPrice = 0;
+      this.setIngredients(ingredients);
+      this.setMass(mass);
+      this.initPizza();
+    }
     /**
      * inicializador de pizzeria
      * 
@@ -302,21 +334,19 @@ var Pizza = exports.Pizza = function (_Ingredients) {
     value: function initPizza() {
       var _this2 = this;
 
-      var defaulPrice = this.massPrice; // asigna valor por defecto
       var price = new _utils.Util('es-CL', 'cpl');
-      var pizzaPrice = defaulPrice;
+      var pizzaPrice = this.massPrice; // asigna valor por defecto
 
       this.selected = new Proxy(this.selected, {
         set: function set(target, property, value, receiver) {
           target[property] = value;
           _this2.pizzaElement.innerHTML = '';
-          pizzaPrice = defaulPrice;
-
+          pizzaPrice = _this2.massPrice;
           if (property === 'length') {
             _this2.selected.forEach(function (selected) {
               var clone = _this2.getTransparentClone(selected);
               _this2.pizzaElement.appendChild(clone);
-              pizzaPrice += selected.ingredient.price;
+              pizzaPrice += selected.element.ingredient.price;
             });
           }
 
@@ -354,8 +384,8 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       clone.innerText = '';
       Object.assign(clone.style, {
         backgroundColor: 'transparent',
-        backgroundImage: 'url(' + selected.ingredient.image + ')',
-        zIndex: selected.ingredient.priority
+        backgroundImage: 'url(' + selected.element.ingredient.image + ')',
+        zIndex: selected.element.ingredient.priority
       });
       return clone;
     }
@@ -380,7 +410,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _htmlCreator = __webpack_require__(0);
 
-var _ingredient = __webpack_require__(6);
+var _ingredient2 = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -389,12 +419,15 @@ var Ingredients = exports.Ingredients = function () {
     _classCallCheck(this, Ingredients);
 
     this.html = (0, _htmlCreator.htmlCreator)();
-    this.ingredients = ingredients;
     this.selected = [];
-    this.ingredientsElement = this.html.create({
-      type: 'div',
-      className: 'pizzeria__ingredients'
-    });
+    this.ingredients = {
+      element: this.html.create({
+        type: 'div',
+        className: 'pizzeria__ingredients',
+        ingredients: ingredients
+      }),
+      instances: []
+    };
     this.initIngredients();
   }
 
@@ -403,26 +436,46 @@ var Ingredients = exports.Ingredients = function () {
     value: function initIngredients() {
       var _this = this;
 
-      var element = this.ingredientsElement;
+      var element = this.ingredients.element;
       element.appendChild(this.html.create({
         type: 'h1',
         className: 'pizzeria__ingredients-title',
         innerText: 'Ingredients'
       }));
 
-      this.ingredients.map(function (ingredient) {
-        var newIngredient = new _ingredient.Ingredient(ingredient);
-        newIngredient.element.addEventListener('click', function () {
-          var index = _this.selected.indexOf(newIngredient);
+      this.ingredients.element.ingredients.map(function (ingredient, index) {
+        _this.ingredients.instances.push(new _ingredient2.Ingredient(ingredient));
+
+        var _ingredient = _this.ingredients.instances[index];
+        _ingredient.element.addEventListener('click', function () {
+          var index = _this.selected.indexOf(_ingredient);
           if (index < 0) {
-            _this.selected.push(newIngredient);
+            _this.selected.push(_ingredient);
           } else {
             _this.selected.splice(index, 1);
           }
         });
-        element.appendChild(newIngredient.element);
+        element.appendChild(_ingredient.element);
       });
       return element;
+    }
+  }, {
+    key: 'setIngredients',
+    value: function setIngredients(ingredients) {
+      var _this2 = this;
+
+      this.ingredients.instances.forEach(function (ingredient) {
+        return ingredient.removeSelected();
+      });
+      this.selected = [];
+      ingredients.map(function (ing) {
+        _this2.ingredients.instances.forEach(function (ingredient) {
+          if (ingredient.element.ingredient.name === ing.name) {
+            ingredient.setSelected();
+            _this2.selected.push(ingredient);
+          }
+        });
+      });
     }
   }]);
 
@@ -452,11 +505,11 @@ var Ingredient = exports.Ingredient = function () {
     _classCallCheck(this, Ingredient);
 
     this.html = (0, _htmlCreator.htmlCreator)();
-    this.ingredient = ingredient;
     this.element = this.html.create({
       type: 'div',
-      className: 'pizzeria__ingredients__item ' + this.ingredient.name,
-      innerText: this.ingredient.name
+      className: 'pizzeria__ingredients__item',
+      innerText: ingredient.name,
+      ingredient: ingredient
     });
     this.initIngredient();
   }
@@ -464,8 +517,9 @@ var Ingredient = exports.Ingredient = function () {
   _createClass(Ingredient, [{
     key: 'initIngredient',
     value: function initIngredient() {
+      var _this = this;
+
       var element = this.element;
-      element.innerHTML = this.ingredient.name;
       element.appendChild(this.html.create({
         type: 'span',
         className: 'pizzeria__ingredients__item-checked'
@@ -477,13 +531,23 @@ var Ingredient = exports.Ingredient = function () {
 
       element.addEventListener('click', function (event) {
         if (element.classList.contains('selected')) {
-          element.classList.remove('selected');
+          _this.removeSelected();
         } else {
-          element.classList.add('selected');
+          _this.setSelected();
         }
       });
 
       return element;
+    }
+  }, {
+    key: 'setSelected',
+    value: function setSelected() {
+      this.element.classList.add('selected');
+    }
+  }, {
+    key: 'removeSelected',
+    value: function removeSelected() {
+      this.element.classList.remove('selected');
     }
   }]);
 
@@ -500,7 +564,145 @@ var Ingredient = exports.Ingredient = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var data = exports.data = [{
+exports.Masas = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _htmlCreator = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Masas = exports.Masas = function () {
+  function Masas(masas) {
+    _classCallCheck(this, Masas);
+
+    this.html = (0, _htmlCreator.htmlCreator)();
+    this.masas = masas;
+    this.masasElement = this.html.create({
+      type: 'div',
+      className: 'pizzeria__masas'
+    });
+    this.masasElement = this.initMasas();
+  }
+
+  _createClass(Masas, [{
+    key: 'initMasas',
+    value: function initMasas() {
+      var _this = this;
+
+      this.masas.forEach(function (masa, i) {
+        _this.masasElement.appendChild(_this.creteContainer(masa));
+      });
+      return this.masasElement;
+    }
+  }, {
+    key: 'creteContainer',
+    value: function creteContainer(masa) {
+      var container = this.html.create({
+        type: 'div',
+        className: 'pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
+        innerText: masa.name,
+        masa: masa
+      });
+      Object.assign(container.style, {
+        backgroundImage: 'url(' + masa.image + ')'
+      });
+      return container;
+    }
+  }]);
+
+  return Masas;
+}();
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var dataMasas = exports.dataMasas = [{
+  "name": "Normal",
+  "image": "./image/normal.png",
+  "price": 3500
+}, {
+  "name": "Borde Queso",
+  "image": "./image/border-queso.png",
+  "price": 4000
+}, {
+  "name": "Delgada",
+  "image": "./image/delgada.png",
+  "price": 3000
+}];
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var hamaica = exports.hamaica = [{
+  "name": "tomate",
+  "image": "./image/tomate.png",
+  "price": 100,
+  "priority": 2
+}, {
+  "name": "champinon",
+  "image": "./image/champinon.png",
+  "price": 100,
+  "priority": 8
+}, {
+  "name": "queso",
+  "image": "./image/queso.png",
+  "price": 100,
+  "priority": 1
+}, {
+  "name": "aceitunas",
+  "image": "./image/aceitunas.png",
+  "price": 100,
+  "priority": 6
+}];
+
+var peperoni = exports.peperoni = [{
+  "name": "queso",
+  "image": "./image/queso.png",
+  "price": 100,
+  "priority": 1
+}, {
+  "name": "aceitunas",
+  "image": "./image/aceitunas.png",
+  "price": 100,
+  "priority": 6
+}, {
+  "name": "peperoni",
+  "image": "./image/peperoni.png",
+  "price": 100,
+  "priority": 4
+}, {
+  "name": "jamon",
+  "image": "./image/jamon.png",
+  "price": 100,
+  "priority": 3
+}];
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ingredients = exports.ingredients = [{
   "name": "tomate",
   "image": "./image/tomate.png",
   "price": 100,
@@ -540,91 +742,6 @@ var data = exports.data = [{
   "image": "./image/rucula.png",
   "price": 100,
   "priority": 7
-}];
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Masas = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _htmlCreator = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Masas = exports.Masas = function () {
-  function Masas(masas) {
-    _classCallCheck(this, Masas);
-
-    this.html = (0, _htmlCreator.htmlCreator)();
-    this.masas = masas;
-    this.masasElement = this.html.create({
-      type: 'div',
-      className: 'pizzeria__masas'
-    });
-    this.masasElement = this.initMasas();
-  }
-
-  _createClass(Masas, [{
-    key: 'initMasas',
-    value: function initMasas() {
-      var _this = this;
-
-      this.masas.forEach(function (masa, i) {
-        var masaElement = _this.creteContainer(masa);
-        _this.masasElement.appendChild(masaElement);
-      });
-      return this.masasElement;
-    }
-  }, {
-    key: 'creteContainer',
-    value: function creteContainer(masa) {
-      var container = this.html.create({
-        type: 'div',
-        className: 'pizzeria__masas-item ' + masa.name.replace(/\s/g, '-'),
-        innerText: masa.name,
-        value: masa.price
-      });
-      Object.assign(container.style, {
-        backgroundImage: 'url(' + masa.image + ')'
-      });
-      return container;
-    }
-  }]);
-
-  return Masas;
-}();
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var dataMasas = exports.dataMasas = [{
-  "name": "Normal",
-  "image": "./image/normal.png",
-  "price": 3500
-}, {
-  "name": "Borde Queso",
-  "image": "./image/border-queso.png",
-  "price": 4000
-}, {
-  "name": "Delgada",
-  "image": "./image/delgada.png",
-  "price": 3000
 }];
 
 /***/ })
