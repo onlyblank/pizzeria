@@ -211,6 +211,7 @@ var Pizzeria = exports.Pizzeria = function () {
       pizzeria.appendChild(this.pizza.priceElement);
       pizzeria.appendChild(this.pizza.ingredientsElement);
       pizzeria.appendChild(this.masas.masasElement);
+      pizzeria.appendChild(this.pizza.resetElement);
       return pizzeria;
     }
   }, {
@@ -275,6 +276,7 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       className: 'pizzeria__pizza-price',
       innerText: _this.massPrice
     });
+    _this.resetElement = _this.reset();
     _this.pizzaElement = _this.initPizza();
     return _this;
   }
@@ -329,7 +331,32 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       this.selected['length'] = this.selected.length;
 
       this.priceElement.innerText = price.formatter.format(pizzaPrice);
+      this.resetElement.innerHTML = '<button>Reset Pizza</button>';
       return this.pizzaElement;
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      var _this3 = this;
+
+      var element = this.html.create({
+        type: 'div',
+        className: 'pizzeria__pizza_reset'
+      });
+
+      element.addEventListener('click', function (event) {
+        document.querySelectorAll('.selected').forEach(function (button) {
+          button.classList.remove("selected");
+        });
+        _this3.selected['length'] = 0;
+      });
+      return element;
+    }
+  }, {
+    key: 'getIngredientSelected',
+    value: function getIngredientSelected() {
+      var ingredientsSelected = document.getElementsByClassName("pizzeria__ingredients__item").children;
+      return ingredientsSelected;
     }
 
     /**
