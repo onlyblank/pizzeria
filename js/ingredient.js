@@ -1,20 +1,21 @@
-import { htmlCreator } from './html-creator.service';
+import {
+  htmlCreator
+} from './html-creator.service';
 
 export class Ingredient {
   constructor(ingredient) {
     this.html = htmlCreator();
-    this.ingredient = ingredient;
     this.element = this.html.create({
       type: 'div',
-      className: `pizzeria__ingredients__item ${this.ingredient.name}`,
-      innerText: this.ingredient.name
+      className: `pizzeria__ingredients__item`,
+      innerText: ingredient.name,
+      ingredient
     });
     this.initIngredient();
   }
 
   initIngredient() {
     let element = this.element;
-    element.innerHTML = this.ingredient.name;
     element.appendChild(this.html.create({
       type: 'span',
       className: 'pizzeria__ingredients__item-checked'
@@ -26,12 +27,18 @@ export class Ingredient {
 
     element.addEventListener('click', (event) => {
       if (element.classList.contains('selected')) {
-        element.classList.remove('selected');
+        this.removeSelected();
       } else {
-        element.classList.add('selected');
+        this.setSelected();
       }
     });
 
     return element;
+  }
+  setSelected() {
+    this.element.classList.add('selected');    
+  }
+  removeSelected(){
+    this.element.classList.remove('selected');
   }
 }
