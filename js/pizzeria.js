@@ -69,6 +69,7 @@ export class Pizzeria {
     pizzeria.appendChild(this.pizza.ingredients.element);
     pizzeria.appendChild(this.masas.masasElement);
     pizzeria.appendChild(pizzaCollection);
+    pizzeria.appendChild(this.pizza.resetElement);
     return pizzeria;
   }
   setMasaPizza(masa) {
