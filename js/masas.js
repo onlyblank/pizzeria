@@ -1,4 +1,6 @@
-import { htmlCreator } from './html-creator.service';
+import {
+  htmlCreator
+} from './html-creator.service';
 
 export class Masas {
 
@@ -7,15 +9,14 @@ export class Masas {
     this.masas = masas;
     this.masasElement = this.html.create({
       type: 'div',
-      className: 'pizzeria__masas'
+      className: 'pizzeria__masas',
     });
     this.masasElement = this.initMasas();
   }
 
   initMasas() {
     this.masas.forEach((masa, i) => {
-      const masaElement = this.creteContainer(masa);
-      this.masasElement.appendChild(masaElement);
+      this.masasElement.appendChild(this.creteContainer(masa));
     });
     return this.masasElement;
   }
@@ -25,7 +26,7 @@ export class Masas {
       type: 'div',
       className: `pizzeria__masas-item ${masa.name.replace(/\s/g, '-')}`,
       innerText: masa.name,
-      value: masa.price
+      masa
     });
     Object.assign(container.style, {
       backgroundImage: `url(${masa.image})`

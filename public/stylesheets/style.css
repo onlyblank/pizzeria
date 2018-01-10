@@ -3,24 +3,23 @@
   flex-wrap: wrap;
   width: 700px;
   margin: 0 auto;
-  position: relative;
-  &__pizza_collection {
+  position: relative; }
+  .pizzeria__pizza_collection {
     display: inline-block;
     flex-grow: 1;
     flex-basis: calc(100% / 90);
     margin-left: 10px;
-    margin-right: 10px;
-    .pizzeria__pizza {
+    margin-right: 10px; }
+    .pizzeria__pizza_collection .pizzeria__pizza {
       height: 200;
       width: 200;
       position: relative;
-      overflow: visible;
-      .pizzeria__ingredients__item {
+      overflow: visible; }
+      .pizzeria__pizza_collection .pizzeria__pizza .pizzeria__ingredients__item {
         width: 100%;
         height: 100%;
-        background-position-x: center;
-      }
-      .title {
+        background-position-x: center; }
+      .pizzeria__pizza_collection .pizzeria__pizza .title {
         position: absolute;
         background: #cea257;
         z-index: 90;
@@ -33,11 +32,8 @@
         margin-top: 0;
         color: #290707;
         font-family: monospace;
-        cursor: pointer;
-      }
-    }
-  }
-  &__pizza_reset>button {
+        cursor: pointer; }
+  .pizzeria__pizza_reset > button {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -47,15 +43,14 @@
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
-    cursor: pointer;
-  }
-  &__ingredients {
+    cursor: pointer; }
+  .pizzeria__ingredients {
     display: inline-block;
     flex-grow: 1;
     flex-basis: calc(100% / 90);
     margin-left: 10px;
-    margin-right: 10px;
-    &__item {
+    margin-right: 10px; }
+    .pizzeria__ingredients__item {
       padding: 5px 0;
       border-bottom: 2px solid silver;
       min-height: 25px;
@@ -67,13 +62,12 @@
       text-align: left;
       align-items: center;
       justify-content: flex-end;
-      text-transform: capitalize;
-      
-      &-checked {
+      text-transform: capitalize; }
+      .pizzeria__ingredients__item-checked {
         opacity: 0;
         transition: all 250ms;
-        width: 0;
-        &::after {
+        width: 0; }
+        .pizzeria__ingredients__item-checked::after {
           content: '';
           width: 9px;
           height: 5px;
@@ -90,30 +84,23 @@
           opacity: 1;
           transition: all 200ms;
           border-bottom-color: transparent;
-          border-left-color: transparent;
-        }
-      }
-      &.selected &-checked {
+          border-left-color: transparent; }
+      .pizzeria__ingredients__item.selected .pizzeria__ingredients__item-checked {
         opacity: 1;
         margin: 0 10px;
-        width: auto;
-        &::after {
+        width: auto; }
+        .pizzeria__ingredients__item.selected .pizzeria__ingredients__item-checked::after {
           border-bottom-color: #1f201c;
-          border-left-color: #1f201c;
-        }
-      }
-    }
-    &-pizza-price {
+          border-left-color: #1f201c; }
+    .pizzeria__ingredients-pizza-price {
       display: inline-block;
       flex-grow: 1;
       flex-basis: calc(100% /2);
       margin-left: 10px;
       margin-right: 10px;
       font-size: 40px;
-      margin-top: 30px;
-    }
-  }
-  &__pizza {
+      margin-top: 30px; }
+  .pizzeria__pizza {
     height: 500px;
     width: 500px;
     border-radius: 100%;
@@ -124,22 +111,20 @@
     background-size: cover;
     display: inline-block;
     flex-grow: 1;
-    flex-basis: calc(100% / 2);
-    .pizzeria__ingredients__item {
+    flex-basis: calc(100% / 2); }
+    .pizzeria__pizza .pizzeria__ingredients__item {
       position: absolute;
       height: 500px;
       width: 500px;
       background-size: 100%;
       background-position-x: 520px;
       border-radius: 100%;
-      border: none;
-    }
-  }
-  &__masas {
+      border: none; }
+  .pizzeria__masas {
     display: flex;
     flex-wrap: wrap;
-    flex-basis: calc(100% / 1);
-    &-item {
+    flex-basis: calc(100% / 1); }
+    .pizzeria__masas-item {
       height: 100px;
       background-position-y: -50%;
       background-size: 75%;
@@ -148,21 +133,14 @@
       display: inline-block;
       flex-grow: 1;
       flex-basis: calc(100% / 3);
-      cursor: pointer;
-    }
-  }
-}
+      cursor: pointer; }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width: 650px) {
   .pizzeria {
-    width: 500px;
-    &__pizza {
-      flex-basis: calc(100% / 1);
-    }
-    &__masas {
-      &-item {
-        background-size: 100%;
-      }
-    }
-  }
-}
+    width: 500px; }
+    .pizzeria__pizza {
+      flex-basis: calc(100% / 1); }
+    .pizzeria__masas-item {
+      background-size: 100%; } }
+
+/*# sourceMappingURL=style.css.map */
