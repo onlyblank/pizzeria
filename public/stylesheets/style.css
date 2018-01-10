@@ -11,23 +11,39 @@
     margin-left: 10px;
     margin-right: 10px; }
     .pizzeria__pizza_collection .pizzeria__pizza {
-      height: 300px;
-      width: 300px; }
+      height: 200;
+      width: 200;
+      position: relative;
+      overflow: visible; }
       .pizzeria__pizza_collection .pizzeria__pizza .pizzeria__ingredients__item {
-        width: 300px;
-        height: 300px;
-        background-position-x: 310px; }
-  .pizzeria__pizza-price {
-    left: 0;
-    top: 0;
-    margin-left: 0;
-    overflow: hidden;
-    background-position: center;
-    background-size: cover;
-    position: absolute;
-    font-size: 40px;
-    padding: 20px;
-    box-sizing: border-box; }
+        width: 100%;
+        height: 100%;
+        background-position-x: center; }
+      .pizzeria__pizza_collection .pizzeria__pizza .title {
+        position: absolute;
+        background: #cea257;
+        z-index: 90;
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 2px;
+        box-shadow: 1px 1px 1px #ffffff75;
+        top: 5px;
+        margin-bottom: 0;
+        margin-top: 0;
+        color: #290707;
+        font-family: monospace;
+        cursor: pointer; }
+  .pizzeria__pizza_reset > button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer; }
   .pizzeria__ingredients {
     display: inline-block;
     flex-grow: 1;
@@ -76,6 +92,14 @@
         .pizzeria__ingredients__item.selected .pizzeria__ingredients__item-checked::after {
           border-bottom-color: #1f201c;
           border-left-color: #1f201c; }
+    .pizzeria__ingredients-pizza-price {
+      display: inline-block;
+      flex-grow: 1;
+      flex-basis: calc(100% /2);
+      margin-left: 10px;
+      margin-right: 10px;
+      font-size: 40px;
+      margin-top: 30px; }
   .pizzeria__pizza {
     height: 500px;
     width: 500px;

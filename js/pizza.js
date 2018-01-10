@@ -21,7 +21,7 @@ export class Pizza extends Ingredients {
     });
     this.priceElement = this.html.create({ // solo muestra el precio
       type: 'div',
-      className: 'pizzeria__pizza-price',
+      className: 'pizzeria__ingredients-pizza-price',
       innerText: this.massPrice
     });
     this.resetElement = this.reset();

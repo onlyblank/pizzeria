@@ -43,6 +43,7 @@ export class Pizzeria {
       type: 'div',
       className: 'pizzeria__pizza_collection'
     });
+
     const masas = this.masas.masasElement.childNodes;
 
     masas.forEach(
@@ -50,12 +51,14 @@ export class Pizzeria {
     );
     this.hamaica.setSelect(hamaica);
     this.hamaica.setMass(this.masas.masasElement.childNodes[borderQueso]);
+    this.hamaica.pizzaElement.appendChild(this.html.create({type:'h3',innerText:'Hamaica', className:'title'}));
     this.hamaica.pizzaElement.addEventListener('click', () => {
       _self.selectPizzaType(this.hamaica, hamaica);
     })
 
     this.peperoni.setSelect(peperoni);
     this.peperoni.setMass(this.masas.masasElement.childNodes[normal]);
+    this.peperoni.pizzaElement.appendChild(this.html.create({type:'h3',innerText:'Peperoni', className:'title'}));
     this.peperoni.pizzaElement.addEventListener('click', () => {
       _self.selectPizzaType(this.peperoni, peperoni);
     })
@@ -65,10 +68,10 @@ export class Pizzeria {
     pizzaCollection.appendChild(this.hamaica.pizzaElement);
     pizzaCollection.appendChild(this.peperoni.pizzaElement);
     pizzeria.appendChild(this.pizza.pizzaElement);
-    pizzeria.appendChild(this.pizza.priceElement);
+    this.pizza.ingredients.element.appendChild(this.pizza.priceElement);
     pizzeria.appendChild(this.pizza.ingredients.element);
-    pizzeria.appendChild(this.masas.masasElement);
     pizzeria.appendChild(pizzaCollection);
+    pizzeria.appendChild(this.masas.masasElement);
     pizzeria.appendChild(this.pizza.resetElement);
     return pizzeria;
   }

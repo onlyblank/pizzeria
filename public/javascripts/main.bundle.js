@@ -198,17 +198,20 @@ var Pizzeria = exports.Pizzeria = function () {
         type: 'div',
         className: 'pizzeria__pizza_collection'
       });
+
       var masas = this.masas.masasElement.childNodes;
 
       masas.forEach(this.setMasaPizza.bind(this));
       this.hamaica.setSelect(_pizzaTypes.hamaica);
       this.hamaica.setMass(this.masas.masasElement.childNodes[borderQueso]);
+      this.hamaica.pizzaElement.appendChild(this.html.create({ type: 'h3', innerText: 'Hamaica', className: 'title' }));
       this.hamaica.pizzaElement.addEventListener('click', function () {
         _self.selectPizzaType(_this.hamaica, _pizzaTypes.hamaica);
       });
 
       this.peperoni.setSelect(_pizzaTypes.peperoni);
       this.peperoni.setMass(this.masas.masasElement.childNodes[normal]);
+      this.peperoni.pizzaElement.appendChild(this.html.create({ type: 'h3', innerText: 'Peperoni', className: 'title' }));
       this.peperoni.pizzaElement.addEventListener('click', function () {
         _self.selectPizzaType(_this.peperoni, _pizzaTypes.peperoni);
       });
@@ -218,10 +221,11 @@ var Pizzeria = exports.Pizzeria = function () {
       pizzaCollection.appendChild(this.hamaica.pizzaElement);
       pizzaCollection.appendChild(this.peperoni.pizzaElement);
       pizzeria.appendChild(this.pizza.pizzaElement);
-      pizzeria.appendChild(this.pizza.priceElement);
+      this.pizza.ingredients.element.appendChild(this.pizza.priceElement);
       pizzeria.appendChild(this.pizza.ingredients.element);
-      pizzeria.appendChild(this.masas.masasElement);
       pizzeria.appendChild(pizzaCollection);
+      pizzeria.appendChild(this.masas.masasElement);
+      pizzeria.appendChild(this.pizza.resetElement);
       return pizzeria;
     }
   }, {
@@ -287,9 +291,10 @@ var Pizza = exports.Pizza = function (_Ingredients) {
     });
     _this.priceElement = _this.html.create({ // solo muestra el precio
       type: 'div',
-      className: 'pizzeria__pizza-price',
+      className: 'pizzeria__ingredients-pizza-price',
       innerText: _this.massPrice
     });
+    _this.resetElement = _this.reset();
     _this.pizzaElement = _this.initPizza();
     return _this;
   }
@@ -359,7 +364,32 @@ var Pizza = exports.Pizza = function (_Ingredients) {
       this.selected['length'] = this.selected.length;
 
       this.priceElement.innerText = price.formatter.format(pizzaPrice);
+      this.resetElement.innerHTML = '<button>Reset Pizza</button>';
       return this.pizzaElement;
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      var _this3 = this;
+
+      var element = this.html.create({
+        type: 'div',
+        className: 'pizzeria__pizza_reset'
+      });
+
+      element.addEventListener('click', function (event) {
+        document.querySelectorAll('.selected').forEach(function (button) {
+          button.classList.remove("selected");
+        });
+        _this3.selected['length'] = 0;
+      });
+      return element;
+    }
+  }, {
+    key: 'getIngredientSelected',
+    value: function getIngredientSelected() {
+      var ingredientsSelected = document.getElementsByClassName("pizzeria__ingredients__item").children;
+      return ingredientsSelected;
     }
 
     /**
